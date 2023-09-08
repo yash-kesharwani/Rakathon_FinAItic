@@ -9,4 +9,5 @@ export interface UserIntialState {
   gender: string
   income: number
   metro: boolean
+  isDataAvailable: boolean
 }

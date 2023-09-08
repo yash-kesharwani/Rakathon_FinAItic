@@ -19,7 +19,17 @@ export const authApi = splitApi.injectEndpoints({
         }
       },
     }),
+    uploadCSV: build.query<any, any>({
+      query({ userId, formData }) {
+        return {
+          url: `transact/upload?user=${userId}`,
+          method: 'POST',
+          headers: { 'content-type': 'multipart/form-data' },
+          body: formData,
+        }
+      },
+    }),
   }),
 })
 
-export const { useLazyLoginQuery, useLazyRegisterQuery } = authApi
+export const { useLazyLoginQuery, useLazyRegisterQuery, useLazyUploadCSVQuery } = authApi

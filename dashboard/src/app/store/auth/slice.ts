@@ -7,13 +7,14 @@ const initialState: UserIntialState = {
   username: '',
   password: '',
   email: '',
-  id: '',
+  id: '3ad4356f-91c6-469a-a0ba-1f26bd78fd29',
   isLoading: false,
   name: '',
   dob: 0,
   gender: '',
   income: 0,
   metro: false,
+  isDataAvailable: true,
 }
 
 export const authSlice = createSlice({
