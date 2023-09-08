@@ -10,10 +10,9 @@ export default function App() {
         className="flex h-screen overflow-hidden font-Nezto antialiased"
         data-testid={APP_TEST_ID}
       >
-        <div className="relative flex flex-1 flex-col">
+        <div className="relative flex flex-1">
           {/* Content area */}
           <main className="max-w-9xl flex w-full flex-grow">
-            <p>FinAItic</p>
             <Outlet />
           </main>
         </div>
