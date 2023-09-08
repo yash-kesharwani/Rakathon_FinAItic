@@ -1,10 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { useLazyLoginQuery } from '../../store/auth'
+import { setAuthState, useLazyLoginQuery } from '../../store/auth'
 import { Input } from '../../components'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '../../hooks'
 
 export default function Signin() {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const [login] = useLazyLoginQuery()
   const [formValues, setFormValues] = useState({ email: '', password: '' })
 
@@ -14,9 +16,10 @@ export default function Signin() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    login(formValues).then(({ isSuccess }) => {
+    login(formValues).then(({ isSuccess, data }) => {
       if (isSuccess) {
         navigate('/')
+        dispatch(setAuthState(data))
       }
     })
   }
@@ -83,7 +86,12 @@ export default function Signin() {
               </button>
               <p className="text-sm font-light text-gray-500">
                 Don't have an account yet?
-                <span className="text-primary-600 ml-2 font-medium hover:underline">Sign up</span>
+                <NavLink
+                  to={'/signup'}
+                  className="text-primary-600 ml-2 font-medium hover:underline"
+                >
+                  Sign up
+                </NavLink>
               </p>
             </form>
           </div>

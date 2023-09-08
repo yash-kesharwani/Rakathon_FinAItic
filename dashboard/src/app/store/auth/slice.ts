@@ -7,14 +7,14 @@ const initialState: UserIntialState = {
   username: '',
   password: '',
   email: '',
-  id: '3ad4356f-91c6-469a-a0ba-1f26bd78fd29',
+  id: '',
   isLoading: false,
   name: '',
   dob: 0,
   gender: '',
   income: 0,
   metro: false,
-  isDataAvailable: true,
+  isDataAvailable: false,
 }
 
 export const authSlice = createSlice({
@@ -27,8 +27,11 @@ export const authSlice = createSlice({
         ...payload,
       }
     },
+    resetAuthState: () => {
+      return initialState
+    },
   },
   extraReducers: (builder) => {},
 })
 
-export const { setAuthState } = authSlice.actions
+export const { setAuthState, resetAuthState } = authSlice.actions

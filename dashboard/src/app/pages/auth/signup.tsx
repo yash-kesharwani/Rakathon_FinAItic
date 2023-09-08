@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { useLazyRegisterQuery } from '../../store/auth'
 import { Input, Select } from '../../components'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export default function Signup() {
   const navigate = useNavigate()
@@ -153,7 +153,9 @@ export default function Signup() {
               </button>
               <p className="col-span-2 text-sm font-light text-gray-500">
                 Already have an account?
-                <span className="text-primary-600 ml-2 font-medium hover:underline">Login</span>
+                <NavLink to="/signin" className="text-primary-600 ml-2 font-medium hover:underline">
+                  Login
+                </NavLink>
               </p>
             </form>
           </div>
