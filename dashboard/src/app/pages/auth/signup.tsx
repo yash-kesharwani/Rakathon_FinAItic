@@ -2,8 +2,10 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { useLazyRegisterQuery } from '../../store/auth'
 import { Input, Select } from '../../components'
 import moment from 'moment'
+import { useNavigate } from 'react-router-dom'
 
 export default function Signup() {
+  const navigate = useNavigate()
   const [register] = useLazyRegisterQuery()
   const [formValues, setFormValues] = useState({
     email: '',
@@ -21,7 +23,11 @@ export default function Signup() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    register({ ...formValues, dob: moment(formValues.dob).valueOf() })
+    register({ ...formValues, dob: moment(formValues.dob).valueOf() }).then(({ isSuccess }) => {
+      if (isSuccess) {
+        navigate('/signin')
+      }
+    })
   }
   return (
     <div className="w-full bg-gray-50">

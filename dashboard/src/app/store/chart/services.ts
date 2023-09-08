@@ -3,10 +3,13 @@ import { splitChartApi } from '../api'
 export const authApi = splitChartApi.injectEndpoints({
   endpoints: (build) => ({
     getPieChart: build.query<any, any>({
-      query() {
+      query(userId) {
         return {
-          url: `user/login`,
-          method: 'GET',
+          url: `income_category_avg`,
+          method: 'POST',
+          body: {
+            user_id: userId,
+          },
         }
       },
     }),

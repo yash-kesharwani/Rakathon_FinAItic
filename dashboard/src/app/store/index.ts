@@ -1,12 +1,15 @@
 import { configureStore, ThunkAction, Action, PreloadedState } from '@reduxjs/toolkit'
 import { persistedReducer, rootReducer } from './persistor'
 import persistStore from 'redux-persist/es/persistStore'
-import { splitApi } from './api'
+import { splitApi, splitChartApi } from './api'
 
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat([splitApi.middleware]),
+    getDefaultMiddleware({ serializableCheck: false }).concat([
+      splitApi.middleware,
+      splitChartApi.middleware,
+    ]),
 })
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({

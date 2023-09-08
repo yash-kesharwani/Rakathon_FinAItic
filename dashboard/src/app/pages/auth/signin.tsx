@@ -1,8 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useLazyLoginQuery } from '../../store/auth'
 import { Input } from '../../components'
+import { useNavigate } from 'react-router-dom'
 
 export default function Signin() {
+  const navigate = useNavigate()
   const [login] = useLazyLoginQuery()
   const [formValues, setFormValues] = useState({ email: '', password: '' })
 
@@ -12,7 +14,11 @@ export default function Signin() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    login(formValues)
+    login(formValues).then(({ isSuccess }) => {
+      if (isSuccess) {
+        navigate('/')
+      }
+    })
   }
 
   return (

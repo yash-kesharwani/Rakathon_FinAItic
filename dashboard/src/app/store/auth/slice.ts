@@ -7,22 +7,27 @@ const initialState: UserIntialState = {
   username: '',
   password: '',
   email: '',
-  userId: '',
+  id: '',
   isLoading: false,
+  name: '',
+  dob: 0,
+  gender: '',
+  income: 0,
+  metro: false,
 }
 
 export const authSlice = createSlice({
   name: reducerPath,
   initialState,
   reducers: {
-    changeLoginInputValue: (prevState, { payload }) => {
+    setAuthState: (prevState, { payload }) => {
       return {
         ...prevState,
-        [payload.type]: payload.value,
+        ...payload,
       }
     },
   },
   extraReducers: (builder) => {},
 })
 
-export const { changeLoginInputValue } = authSlice.actions
+export const { setAuthState } = authSlice.actions

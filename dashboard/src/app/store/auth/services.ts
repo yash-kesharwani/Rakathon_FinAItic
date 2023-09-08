@@ -3,11 +3,10 @@ import { splitApi } from '../api'
 export const authApi = splitApi.injectEndpoints({
   endpoints: (build) => ({
     login: build.query<any, any>({
-      query({ username, password }) {
+      query({ email, password }) {
         return {
-          url: `user/login`,
+          url: `user/login?username=${email}&password=${password}`,
           method: 'POST',
-          body: { username, password },
         }
       },
     }),

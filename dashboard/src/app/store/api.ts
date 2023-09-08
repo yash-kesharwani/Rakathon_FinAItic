@@ -7,12 +7,10 @@ export const CHART_URL = `${process.env.REACT_APP_CHART_URL}/`
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,
-  credentials: 'include',
 })
 
 const baseChartQuery = fetchBaseQuery({
   baseUrl: CHART_URL,
-  credentials: 'include',
 })
 
 /**
