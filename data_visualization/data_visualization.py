@@ -98,7 +98,7 @@ def category_avg(response: Response,request: DatamodelParams = Body(...)):
 @app.post("/monthwise_summary")
 def category_avg(response: Response,request: DatamodelParams = Body(...)):
     user_id = request.user_id
-    postgreSQL_select_Query = "select DATE_TRUNC ('month', txdate) as month,sum(deposit) as deposit,sum(withdrawal) as withdrawal from transactions where user_id = '"+user_id+"' group by DATE_TRUNC ('month', txdate);"
+    postgreSQL_select_Query = "select TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm') as month,sum(deposit) as deposit,sum(withdrawal) as withdrawal from transactions where user_id = '"+user_id+"' group by TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm') order by TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm');"
     cursor.execute(postgreSQL_select_Query)
     categories =  cursor.fetchall()
     categories_df = pd.DataFrame.from_records(categories, columns=[x[0] for x in cursor.description])
@@ -115,12 +115,12 @@ def category_avg(response: Response,request: DatamodelParams = Body(...)):
   "yAxis": {},
   "series": [
     {
-      "data": col_withdrawal_list,
+      "Withdrawals": col_withdrawal_list,
       "type": 'bar',
       "stack": 'x'
     },
     {
-      "data": col_savings_list,
+      "Savings": col_savings_list,
       "type": 'bar',
       "stack": 'x'
     }
