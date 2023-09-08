@@ -6,7 +6,8 @@ dob timestamp,
 email VARCHAR,
 password VARCHAR,
 avg_income NUMERIC (15, 2),
-metro boolean
+metro boolean,
+is_data_available boolean
 );
 
 CREATE TABLE transactions (

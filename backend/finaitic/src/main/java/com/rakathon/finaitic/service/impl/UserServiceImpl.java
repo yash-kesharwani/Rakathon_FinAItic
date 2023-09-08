@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
             user.setGender(registeReq.getGender());
             user.setMetro(registeReq.getMetro());
             user.setPassword(Base64.getEncoder().encodeToString(registeReq.getPassword().getBytes()));
+            user.setIsDataAvailable(false);
             userRepository.save(user);
             return true;
         } catch (Exception e){
@@ -46,5 +47,15 @@ public class UserServiceImpl implements UserService {
                 return user;
             }else return null;
         }else return null;
+    }
+
+    public boolean updateDataAvailability(String user){
+        Optional<User> optionalUser = userRepository.findById(UUID.fromString(user));
+        if(optionalUser.isPresent()){
+            User user1 = optionalUser.get();
+            user1.setIsDataAvailable(true);
+            userRepository.save(user1);
+            return true;
+        } else return false;
     }
 }

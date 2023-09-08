@@ -24,5 +24,7 @@ public class User {
     @Column(name= "avg_income")
     private Double income;
     private Boolean metro;
+    @Column(name= "is_data_available")
+    private Boolean isDataAvailable;
 
 }
