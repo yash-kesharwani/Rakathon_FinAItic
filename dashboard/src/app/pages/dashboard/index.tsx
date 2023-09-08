@@ -16,17 +16,12 @@ export function Dashboard() {
     dispatch(resetAuthState())
     navigate('/signin')
   }
+
   return (
     <div className="flex h-screen w-full select-none overflow-hidden">
       <nav className="flex w-24 flex-col items-center bg-white py-4">
         <div>
-          <svg className="h-8 w-8 fill-current text-primary" viewBox="0 0 24 24">
-            <path
-              d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3m6.82
-                  6L12 12.72 5.18 9 12 5.28 18.82 9M17 16l-5 2.72L7 16v-3.73L12
-                  15l5-2.73V16z"
-            ></path>
-          </svg>
+          <img className="h-20 w-20" src="money-tree.svg" />
         </div>
 
         <ul className="mt-2 capitalize text-gray-700">
@@ -71,14 +66,27 @@ export function Dashboard() {
             </NavLink>
           </li>
         </ul>
-        <div className="mt-auto flex items-center rounded-full bg-purple-200 p-2 text-primary">
+        <div className="mt-auto flex items-center rounded-full bg-primary p-2 text-white">
           <div onClick={handleLogout}>
-            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-              <path
-                d="M12 1c-5 0-9 4-9 9v7a3 3 0 003 3h3v-8H5v-2a7 7 0 017-7
-						7 7 0 017 7v2h-4v8h4v1h-7v2h6a3 3 0
-						003-3V10c0-5-4.03-9-9-9z"
-              ></path>
+            <svg
+              className="h-5 w-5 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 198.715 198.715"
+            >
+              <g>
+                <path
+                  d="M161.463,48.763c-2.929-2.929-7.677-2.929-10.607,0c-2.929,2.929-2.929,7.677,0,10.606
+		c13.763,13.763,21.342,32.062,21.342,51.526c0,19.463-7.579,37.761-21.342,51.523c-14.203,14.204-32.857,21.305-51.516,21.303
+		c-18.659-0.001-37.322-7.104-51.527-21.309c-28.405-28.405-28.402-74.625,0.005-103.032c2.929-2.929,2.929-7.678,0-10.606
+		c-2.929-2.929-7.677-2.929-10.607,0C2.956,83.029,2.953,138.766,37.206,173.019c17.132,17.132,39.632,25.697,62.135,25.696
+		c22.497-0.001,44.997-8.564,62.123-25.69c16.595-16.594,25.734-38.659,25.734-62.129C187.199,87.425,178.059,65.359,161.463,48.763
+		z"
+                />
+                <path
+                  d="M99.332,97.164c4.143,0,7.5-3.358,7.5-7.5V7.5c0-4.142-3.357-7.5-7.5-7.5s-7.5,3.358-7.5,7.5v82.164
+		C91.832,93.807,95.189,97.164,99.332,97.164z"
+                />
+              </g>
             </svg>
           </div>
         </div>

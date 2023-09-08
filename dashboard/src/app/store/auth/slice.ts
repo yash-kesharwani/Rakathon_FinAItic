@@ -30,8 +30,14 @@ export const authSlice = createSlice({
     resetAuthState: () => {
       return initialState
     },
+    setIsDataAvailable: (prevState) => {
+      return {
+        ...prevState,
+        isDataAvailable: true,
+      }
+    },
   },
   extraReducers: (builder) => {},
 })
 
-export const { setAuthState, resetAuthState } = authSlice.actions
+export const { setAuthState, resetAuthState, setIsDataAvailable } = authSlice.actions
