@@ -1,5 +1,9 @@
 import ReactEcharts from 'echarts-for-react'
-import { useLazyGetExpenseChartQuery, useLazyGetIncomeChartQuery } from '../../store/chart'
+import {
+  useLazyGetExpenseChartQuery,
+  useLazyGetIncomeChartQuery,
+  useLazyGetMonthWiseSummaryQuery,
+} from '../../store/chart'
 import { authSelector, useLazyUploadCSVQuery } from '../../store/auth'
 import { useAppSelector } from '../../hooks'
 import { useEffect } from 'react'
@@ -8,11 +12,13 @@ export default function View() {
   const { id: userId, isDataAvailable } = useAppSelector(authSelector)
   const [getIncomeData, { data: incomeseries = { series: {} } }] = useLazyGetIncomeChartQuery()
   const [getExpenseData, { data: expenseseries = { series: {} } }] = useLazyGetExpenseChartQuery()
+  const [getSummaryData, { data: summary = {} }] = useLazyGetMonthWiseSummaryQuery()
   const [uploadCSV] = useLazyUploadCSVQuery()
 
   useEffect(() => {
     getIncomeData(userId, false)
     getExpenseData(userId, false)
+    getSummaryData(userId, false)
   }, [userId])
 
   const handleFileChange = (e: any) => {
@@ -47,6 +53,16 @@ export default function View() {
             <ReactEcharts
               option={{
                 series: expenseseries.series,
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
+          </div>
+          <div className="col-span-2 rounded-lg border border-gray-200 bg-white p-6 shadow">
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Summary</h5>
+            <ReactEcharts
+              option={{
+                ...summary,
                 responsive: true,
                 maintainAspectRatio: false,
               }}

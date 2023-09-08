@@ -24,7 +24,22 @@ export const authApi = splitChartApi.injectEndpoints({
         }
       },
     }),
+    getMonthWiseSummary: build.query<any, any>({
+      query(userId) {
+        return {
+          url: `monthwise_summary`,
+          method: 'POST',
+          body: {
+            user_id: userId,
+          },
+        }
+      },
+    }),
   }),
 })
 
-export const { useLazyGetIncomeChartQuery, useLazyGetExpenseChartQuery } = authApi
+export const {
+  useLazyGetIncomeChartQuery,
+  useLazyGetExpenseChartQuery,
+  useLazyGetMonthWiseSummaryQuery,
+} = authApi
