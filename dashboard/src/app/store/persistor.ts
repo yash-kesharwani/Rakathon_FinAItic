@@ -3,7 +3,7 @@ import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
 import { authSlice } from './auth'
 import { RootState } from '.'
-import { splitApi } from './api'
+import { splitApi, splitChartApi } from './api'
 
 const persistConfig = {
   key: 'root',
@@ -13,6 +13,7 @@ const persistConfig = {
 
 const combinedReducer = combineReducers({
   [splitApi.reducerPath]: splitApi.reducer,
+  [splitChartApi.reducerPath]: splitChartApi.reducer,
   [authSlice.name]: authSlice.reducer,
 })
 

@@ -1,6 +1,7 @@
-import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const API_URL = `${process.env.REACT_APP_API_URL}/api/`
+export const CHART_URL = `${process.env.REACT_APP_CHART_URL}/`
 
 // create a new mutex
 // Create our baseQuery instance
@@ -9,7 +10,10 @@ const baseQuery = fetchBaseQuery({
   credentials: 'include',
 })
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 2 })
+const baseChartQuery = fetchBaseQuery({
+  baseUrl: CHART_URL,
+  credentials: 'include',
+})
 
 /**
  * Create a base API to inject endpoints into elsewhere.
@@ -21,6 +25,14 @@ export const splitApi = createApi({
   reducerPath: 'splitApi',
   keepUnusedDataFor: 300,
   refetchOnReconnect: true,
-  baseQuery: baseQueryWithRetry,
+  baseQuery: baseQuery,
+  endpoints: () => ({}),
+})
+
+export const splitChartApi = createApi({
+  reducerPath: 'splitChartApi',
+  keepUnusedDataFor: 300,
+  refetchOnReconnect: true,
+  baseQuery: baseChartQuery,
   endpoints: () => ({}),
 })

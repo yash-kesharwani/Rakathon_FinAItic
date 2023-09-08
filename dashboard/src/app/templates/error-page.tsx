@@ -9,7 +9,7 @@ export default function ErrorPage() {
   const error = useRouteError() as ErrorType
 
   return (
-    <section id="error-page" className="bg-white relative z-10 py-[120px]">
+    <section id="error-page" className="relative z-10 bg-white py-[120px]">
       <div className="container mx-auto">
         <div className="-mx-4 flex">
           <div className="w-full px-4">
