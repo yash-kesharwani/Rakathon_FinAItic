@@ -1,39 +1,42 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { useLazyRegisterQuery } from '../../store/auth'
+import { useRegisterMutation } from '../../store/auth'
 import { Input, Select } from '../../components'
 import moment from 'moment'
 import { NavLink, useNavigate } from 'react-router-dom'
+import React from 'react'
 
 export default function Signup() {
   const navigate = useNavigate()
-  const [register] = useLazyRegisterQuery()
+  const [register] = useRegisterMutation()
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
     income: '',
     name: '',
-    gender: '',
+    gender: 'male',
     dob: '',
-    metro: '',
+    metro: 'true',
   })
 
   const hanleOnChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    register({ ...formValues, dob: moment(formValues.dob).valueOf() }).then(({ isSuccess }) => {
-      if (isSuccess) {
-        navigate('/signin')
-      }
-    })
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+      await register({ ...formValues, dob: moment(formValues.dob).valueOf() }).unwrap()
+      navigate('/signin')
+    } catch (e) {
+      console.log('e', e)
+    }
   }
   return (
     <div className="w-full bg-gray-50">
       <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-        <div className="w-full rounded-lg bg-white shadow sm:max-w-4xl md:mt-0 xl:p-0">
-          <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
+        <div className="relative w-full rounded-lg bg-white shadow sm:max-w-4xl md:mt-0 xl:p-0">
+          <div className="absolute inset-0 -skew-y-6 transform bg-gradient-to-r from-primaryLight to-primaryBold shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
+          <div className="relative space-y-4 bg-white p-6 shadow-lg sm:rounded-lg sm:p-8 md:space-y-6">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               Register with Details
             </h1>
@@ -153,7 +156,10 @@ export default function Signup() {
               </button>
               <p className="col-span-2 text-sm font-light text-gray-500">
                 Already have an account?
-                <NavLink to="/signin" className="text-primary-600 ml-2 font-medium hover:underline">
+                <NavLink
+                  to="/signin"
+                  className="text-primary-600 ml-2 font-medium text-primary hover:underline"
+                >
                   Login
                 </NavLink>
               </p>

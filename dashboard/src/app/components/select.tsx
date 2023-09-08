@@ -7,7 +7,7 @@ export default function Select({
 }: DetailedHTMLProps<InputHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>) {
   return (
     <select
-      className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 ${className}`}
+      className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 accent-primary outline-primaryLight focus:border-primaryLight focus:outline-none focus:ring-primaryLight ${className}`}
       {...otherProps}
     >
       {children}

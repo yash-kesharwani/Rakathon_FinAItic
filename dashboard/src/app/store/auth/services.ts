@@ -10,7 +10,7 @@ export const authApi = splitApi.injectEndpoints({
         }
       },
     }),
-    register: build.query<any, any>({
+    register: build.mutation<any, any>({
       query(body) {
         return {
           url: `user/register`,
@@ -31,4 +31,4 @@ export const authApi = splitApi.injectEndpoints({
   }),
 })
 
-export const { useLazyLoginQuery, useLazyRegisterQuery, useUploadCSVMutation } = authApi
+export const { useLazyLoginQuery, useRegisterMutation, useUploadCSVMutation } = authApi

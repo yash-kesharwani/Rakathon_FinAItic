@@ -11,7 +11,9 @@ module.exports = {
         desktop: '1728px',
       },
       colors: {
-        primary: '#F59600',
+        primary: '#85bb65',
+        primaryLight: '#8FC56F',
+        primaryBold: '#497F29',
         secondary: '#3a3b3f',
       },
       fontFamily: {

@@ -6,7 +6,7 @@ export default function Input({
 }: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) {
   return (
     <input
-      className={`focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border bg-gray-50 p-2.5 sm:text-sm ${className}`}
+      className={`block w-full rounded-lg border bg-gray-50 p-2.5 accent-primary focus:border-primaryBold focus:outline-none focus:ring-primaryBold sm:text-sm ${className}`}
       {...otherProps}
     />
   )
