@@ -30,6 +30,6 @@ public class UserController {
         if(user != null)
             return ResponseEntity.ok().body(user);
         else
-            return ResponseEntity.internalServerError().body("Login Failed");
+            return ResponseEntity.badRequest().body("Login Failed");
     }
 }
