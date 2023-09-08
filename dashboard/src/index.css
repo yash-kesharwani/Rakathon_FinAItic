@@ -1,0 +1,49 @@
+@tailwind base;
+/* Firefox */
+* {
+  scrollbar-width: 2px;
+  scrollbar-color: var(--color-primary) var(--color-transparent);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  scrollbar-color: var(--color-primary);
+  width: 2px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-transparent);
+  border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 14px;
+  border: 3px solid var(--color-transparent);
+}
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Nezto';
+  src: local(''), url('../public/assets/fonts/nezto-regular.ttf'),
+    /* Modern Browsers */ url('../public/assets/fonts/nezto-regular.ttf'); /* Super Modern Browsers */
+}
+
+@font-face {
+  font-family: 'Nezto Bold';
+  src: local(''), url('../public/assets/fonts/nezto-bold.ttf'),
+    /* Modern Browsers */ url('../public//assets//fonts//nezto-bold.ttf'); /* Super Modern Browsers */
+}
+
+@font-face {
+  font-family: 'Nezto Semi Bold';
+  src: local(''), url('../public/assets/fonts/nezto-semibold.ttf'),
+    /* Modern Browsers */ url('../public//assets//fonts//nezto-semibold.ttf'); /* Super Modern Browsers */
+}
+
+@font-face {
+  font-family: 'Nezto Light';
+  src: local(''), url('../public/assets/fonts/nezto-light.ttf'),
+    /* Modern Browsers */ url('../public//assets//fonts//nezto-light.ttf'); /* Super Modern Browsers */
+}

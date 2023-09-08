@@ -1,0 +1,7 @@
+{
+  "src/**/*.+(js|json|ts|tsx)": [
+    "eslint",
+    "react-scripts test --bail --watchAll=false --passWithNoTests"
+  ],
+  "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": ["prettier --write"]
+}
