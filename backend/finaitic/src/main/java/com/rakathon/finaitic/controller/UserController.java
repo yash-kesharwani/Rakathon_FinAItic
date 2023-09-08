@@ -1,6 +1,7 @@
 package com.rakathon.finaitic.controller;
 
 import com.rakathon.finaitic.dao.RegisteReq;
+import com.rakathon.finaitic.dao.ResponseStatus;
 import com.rakathon.finaitic.entity.User;
 import com.rakathon.finaitic.service.UserService;
 import jakarta.validation.Valid;
@@ -15,13 +16,13 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> register(@RequestBody @Valid RegisteReq registeReq){
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseStatus> register(@RequestBody @Valid RegisteReq registeReq){
         boolean status = userService.register(registeReq);
         if(status)
-            return ResponseEntity.ok().body("Success");
+            return ResponseEntity.ok().body(new ResponseStatus("SUCCESS"));
         else
-            return ResponseEntity.internalServerError().body("Failed");
+            return ResponseEntity.badRequest().body(new ResponseStatus("FAILED"));
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,6 +31,6 @@ public class UserController {
         if(user != null)
             return ResponseEntity.ok().body(user);
         else
-            return ResponseEntity.badRequest().body("Login Failed");
+            return ResponseEntity.badRequest().body(new ResponseStatus("FAILED"));
     }
 }
