@@ -7,6 +7,7 @@ import com.rakathon.finaitic.entity.Transaction;
 import com.rakathon.finaitic.repo.CategoryRepository;
 import com.rakathon.finaitic.repo.TransactionRepository;
 import com.rakathon.finaitic.service.TransactionService;
+import com.rakathon.finaitic.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,6 +31,8 @@ public class TransactionServiceImpl implements TransactionService {
     TransactionRepository transactionRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    UserService userService;
     private List<Category> categories;
     Map<String, Integer> keywords;
 
@@ -57,6 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
             category.getKeywords().forEach(str-> keywords.put(str, id));
         });
         list.stream().forEach(txn -> populateTxnEntity(txn, user));
+        userService.updateDataAvailability(user);
         return true;
     }
 
@@ -75,7 +79,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private Date getDateFromStrDate(String strdate) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
             return format.parse(strdate);
         } catch (ParseException e) {

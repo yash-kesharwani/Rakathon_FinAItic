@@ -9,4 +9,5 @@ public interface UserService {
     boolean register(RegisteReq user);
 
     User login(String username, String password);
+    boolean updateDataAvailability(String user);
 }
