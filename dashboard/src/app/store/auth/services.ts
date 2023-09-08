@@ -5,21 +5,22 @@ export const authApi = splitApi.injectEndpoints({
     login: build.query<any, any>({
       query({ username, password }) {
         return {
-          url: `/signin`,
+          url: `user/login`,
           method: 'POST',
           body: { username, password },
         }
       },
     }),
-    logout: build.query({
-      query() {
+    register: build.query<any, any>({
+      query(body) {
         return {
-          url: `/signout`,
+          url: `user/register`,
           method: 'POST',
+          body,
         }
       },
     }),
   }),
 })
 
-export const { useLazyLoginQuery, useLazyLogoutQuery } = authApi
+export const { useLazyLoginQuery, useLazyRegisterQuery } = authApi

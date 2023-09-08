@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useLazyLoginQuery } from '../../store/auth'
+import { Input } from '../../components'
 
 export default function Signin() {
   const [login] = useLazyLoginQuery()
@@ -27,12 +28,11 @@ export default function Signin() {
                 <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-900">
                   Your email
                 </label>
-                <input
+                <Input
                   value={formValues.email}
                   type="email"
                   name="email"
                   id="email"
-                  className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border bg-gray-50 p-2.5 sm:text-sm"
                   placeholder="name@company.com"
                   required={true}
                   onChange={hanleOnChange}
@@ -42,13 +42,12 @@ export default function Signin() {
                 <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-900">
                   Password
                 </label>
-                <input
+                <Input
                   value={formValues.password}
                   type="password"
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border bg-gray-50 p-2.5 sm:text-sm"
                   required={true}
                   onChange={hanleOnChange}
                 />
@@ -56,7 +55,7 @@ export default function Signin() {
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex h-5 items-center">
-                    <input
+                    <Input
                       id="remember"
                       aria-describedby="remember"
                       type="checkbox"
