@@ -16,8 +16,9 @@ public class Transaction {
     @Id
     private UUID id;
     @Column(name = "user_id")
-    private int userId;
+    private UUID userId;
     private Date txdate;
+    private String strdate;
     private String details;
     private Double withdrawal;
     private Double deposit;

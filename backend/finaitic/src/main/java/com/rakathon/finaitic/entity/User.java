@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,8 +15,7 @@ import java.util.Date;
 @Table(name="user_details")
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private int id;
+    private UUID id;
     private String name;
     private String gender;
     private Date dob;
