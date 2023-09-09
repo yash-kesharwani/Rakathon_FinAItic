@@ -16,8 +16,6 @@ export default function View() {
   const [getSummaryData, { data: summary = {} }] = useLazyGetMonthWiseSummaryQuery()
   const [uploadCSV, { isLoading: isUploading }] = useUploadCSVMutation()
 
-  console.log('isDataAvailable', isDataAvailable)
-
   useEffect(() => {
     if (isDataAvailable) {
       getIncomeData(userId, false)
@@ -32,8 +30,8 @@ export default function View() {
     formData.append('file', e.target.files[0])
     try {
       const payload = await uploadCSV({ userId, formData }).unwrap()
-
       dispatch(setIsDataAvailable())
+      window.location.reload()
     } catch (error) {
       console.error('rejected', error)
     }
@@ -72,6 +70,21 @@ export default function View() {
                 ...summary,
                 responsive: true,
                 maintainAspectRatio: false,
+                legend: {
+                  orient: 'vertical',
+                  right: 10,
+                  top: 'center',
+                  data: [
+                    {
+                      name: 'Savings',
+                      icon: 'rect',
+                    },
+                    {
+                      name: 'Expenses',
+                      icon: 'rect',
+                    },
+                  ],
+                },
               }}
             />
           </div>

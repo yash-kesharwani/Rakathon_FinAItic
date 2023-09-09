@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const API_URL = `${process.env.REACT_APP_API_URL}/api/`
 export const CHART_URL = `${process.env.REACT_APP_CHART_URL}/`
+export const MODEL_URL = `${process.env.REACT_APP_MODEL_URL}/`
 
 // create a new mutex
 // Create our baseQuery instance
@@ -11,6 +12,10 @@ const baseQuery = fetchBaseQuery({
 
 const baseChartQuery = fetchBaseQuery({
   baseUrl: CHART_URL,
+})
+
+const baseModelQuery = fetchBaseQuery({
+  baseUrl: MODEL_URL,
 })
 
 /**
@@ -32,5 +37,13 @@ export const splitChartApi = createApi({
   keepUnusedDataFor: 300,
   refetchOnReconnect: true,
   baseQuery: baseChartQuery,
+  endpoints: () => ({}),
+})
+
+export const splitModelApi = createApi({
+  reducerPath: 'splitModelApi',
+  keepUnusedDataFor: 300,
+  refetchOnReconnect: true,
+  baseQuery: baseModelQuery,
   endpoints: () => ({}),
 })

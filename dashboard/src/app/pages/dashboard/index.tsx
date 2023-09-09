@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector, resetAuthState } from '../../store/auth'
 import { useEffect } from 'react'
+import { resetQuery } from '../../store/consultation'
 
 export function Dashboard() {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ export function Dashboard() {
 
   const handleLogout = () => {
     dispatch(resetAuthState())
+    dispatch(resetQuery())
     navigate('/signin')
   }
 
