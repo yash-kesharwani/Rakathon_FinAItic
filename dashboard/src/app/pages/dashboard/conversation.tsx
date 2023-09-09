@@ -82,21 +82,21 @@ export default function Conversation() {
   }
 
   return (
-    <div className="h-full w-full flex-1 bg-gray-100">
-      <div className="main-body container m-auto flex h-full w-11/12 flex-col">
-        <div className="flex-2 flex flex-row py-4"></div>
-        <div className="main flex flex-1 flex-col">
+    <div className="h-full w-full flex-1">
+      <div className="m-auto flex h-full w-full flex-col">
+        <div className="flex-2 flex flex-row py-2"></div>
+        <div className="flex flex-1 flex-col">
           <div className="heading flex-2 hidden lg:block">
-            <h1 className="mb-4 text-3xl text-gray-700">Ask your query</h1>
+            <h1 className="mb-2 text-3xl text-gray-700">Ask your query</h1>
           </div>
-          <div className="flex h-full flex-1">
+          <div className="flex h-screen flex-1">
             <div className="chat-area flex flex-1 flex-col">
               <div className="flex-3">
-                <h2 className="mb-8 border-b-2 border-gray-200 py-1 text-xl">
+                <h2 className="border-b-2 border-gray-200 py-1 text-xl">
                   Chatting with <b>Finnie</b>
                 </h2>
               </div>
-              <div className="h-[65vh] w-full overflow-y-auto">
+              <div className="h-[70vh] w-full overflow-y-auto">
                 <div className="messages flex-1">
                   {consultations.map(ChatBubble)}
 
@@ -119,10 +119,10 @@ export default function Conversation() {
                       </div>
                     </div>
                   )}
-                  <div className="clear-both h-10 w-5" ref={chatWindowRef}></div>
+                  <div className="clear-both h-1 w-5" ref={chatWindowRef}></div>
                 </div>
               </div>
-              <div className="flex-2 pb-10 pt-4">
+              <div className="flex-2 pt-12">
                 <div className="write flex rounded-lg bg-white shadow">
                   <div className="flex-1">
                     <textarea

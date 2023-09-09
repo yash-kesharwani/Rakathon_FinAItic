@@ -99,7 +99,7 @@ export function Dashboard() {
       </nav>
       <div></div>
       <main
-        className="my-1 flex-1 overflow-y-auto rounded-l-lg bg-gray-200 px-10 pb-2 pt-2
+        className="my-1 flex-1 overflow-y-auto rounded-l-lg bg-gray-100 px-10 pb-2 pt-2
       transition duration-500 ease-in-out"
       >
         <Outlet />
