@@ -7,8 +7,8 @@ from datetime import datetime
 def process_data(df):
 
     text = []
-    df = pd.read_csv("~/Desktop/Rakathon/rakathon_dataset.csv")
-    df["txdate"] = df["txdate"].apply(lambda x: datetime.strptime(x, "%d/%m/%Y"))
+    # df = pd.read_csv("~/Desktop/Rakathon/rakathon_dataset.csv")
+    # df["txdate"] = df["txdate"].apply(lambda x: datetime.strptime(x, "%d/%m/%Y"))
     df.sort_values(by=["txdate"], inplace=True)
     df.reset_index(inplace=True, drop=True)
     df["month"] = df["txdate"].apply(lambda x: x.month)
