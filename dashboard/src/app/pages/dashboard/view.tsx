@@ -16,11 +16,17 @@ export default function View() {
   const [getSummaryData, { data: summary = {} }] = useLazyGetMonthWiseSummaryQuery()
   const [uploadCSV, { isLoading: isUploading }] = useUploadCSVMutation()
 
+  async function fetch() {
+    getIncomeData(userId, false)
+    await Promise.resolve(setTimeout)
+    getExpenseData(userId, false)
+    await Promise.resolve(setTimeout)
+    getSummaryData(userId, false)
+  }
+
   useEffect(() => {
     if (isDataAvailable) {
-      getIncomeData(userId, false)
-      getExpenseData(userId, false)
-      getSummaryData(userId, false)
+      fetch()
     }
   }, [userId])
 

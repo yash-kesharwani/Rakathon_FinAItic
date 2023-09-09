@@ -1,6 +1,6 @@
-import { splitChartApi } from '../api'
+import { splitModelApi } from '../api'
 
-export const authApi = splitChartApi.injectEndpoints({
+export const authApi = splitModelApi.injectEndpoints({
   endpoints: (build) => ({
     getAnswers: build.mutation<any, any>({
       query(question) {

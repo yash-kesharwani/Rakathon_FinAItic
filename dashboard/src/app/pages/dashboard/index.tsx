@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector, resetAuthState } from '../../store/auth'
 import { useEffect } from 'react'
 import { resetQuery } from '../../store/consultation'
+import { splitApi, splitChartApi, splitModelApi } from '../../store/api'
 
 export function Dashboard() {
   const navigate = useNavigate()
@@ -14,6 +15,9 @@ export function Dashboard() {
   }, [])
 
   const handleLogout = () => {
+    dispatch(splitApi.util.resetApiState())
+    dispatch(splitChartApi.util.resetApiState())
+    dispatch(splitModelApi.util.resetApiState())
     dispatch(resetAuthState())
     dispatch(resetQuery())
     navigate('/signin')
