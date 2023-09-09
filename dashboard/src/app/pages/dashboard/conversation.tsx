@@ -7,6 +7,12 @@ import {
   useGetAnswersMutation,
 } from '../../store/consultation'
 
+const quickReplies = [
+  'Not enough data to process your request. Please ask something else.',
+  'Cannot process your request please ask something specific.',
+  'This is really vague can you be accurate',
+]
+
 function ChatBubble({ question, answer, time }: any) {
   return answer !== undefined ? (
     <div key={answer} className="message mb-4 flex">
@@ -77,6 +83,7 @@ export default function Conversation() {
         behavior: 'smooth',
       })
     } catch (e) {
+      dispatch(addAnswer(quickReplies[Math.floor(Math.random() * 3 + 1)]))
       console.log(e)
     }
   }

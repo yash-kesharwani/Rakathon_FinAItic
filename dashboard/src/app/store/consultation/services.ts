@@ -13,7 +13,15 @@ export const authApi = splitModelApi.injectEndpoints({
         }
       },
     }),
+    generateFile: build.query<any, any>({
+      query(userId) {
+        return {
+          url: `get_user_id/${userId}`,
+          method: 'GET',
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetAnswersMutation } = authApi
+export const { useGetAnswersMutation, useLazyGenerateFileQuery } = authApi
