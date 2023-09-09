@@ -15,7 +15,8 @@ from utils import process_data
 app = FastAPI()
 con = psycopg2.connect(database="postgres", user="postgres", password = "admin", host="127.0.0.1", port="5432")
 cursor = con.cursor()
-openai.api_key = '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'
+openai.api_key = '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'
+# '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'
 os.environ["OPENAI_API_KEY"] = openai.api_key
 app.embeddings = OpenAIEmbeddings()
 app.loaded_text = None
