@@ -3,37 +3,91 @@ import pandas as pd
 import calendar
 from datetime import datetime
 
-
 def process_data(df):
-
     text = []
-    # df = pd.read_csv("~/Desktop/Rakathon/rakathon_dataset.csv")
-    # df["txdate"] = df["txdate"].apply(lambda x: datetime.strptime(x, "%d/%m/%Y"))
     df.sort_values(by=["txdate"], inplace=True)
     df.reset_index(inplace=True, drop=True)
     df["month"] = df["txdate"].apply(lambda x: x.month)
     df["week"] = df["txdate"].apply(lambda x: str(x.month) + "_" + str((x.day // 7) + 1))
     months_list = df.month.unique().tolist()
-    week_wise = df.groupby(["week", "category"]).agg({"withdrawal": ["min", "max", "mean", "sum"], "balance": "max"})
+
+    week_wise = df.groupby(["week", "category"]).agg({"withdrawal": "sum"})
     week_wise = week_wise.reset_index(drop=False)
     week_wise = week_wise[~week_wise["category"].isin(["SALARY", "INTEREST"])]
-    week_wise.columns = ["week", "category", "wmin", "wmax", "wmean", "wsum", "bmax"]
+    week_wise.columns = ["week", "category", "wsum"]
+    week_wise_bmx = df.groupby(["week"]).agg({"balance": "max"})
+    week_wise_bmx.reset_index(inplace=True)
+    week_wise = week_wise.merge(week_wise_bmx)
+    week_wise_cats = week_wise.groupby(["week"]).agg({"wsum": "sum"})
+    week_wise_cats.reset_index(inplace=True)
+    week_wise_cats.columns = ["week", "total_sum"]
+    week_wise = week_wise.merge(week_wise_cats)
+    week_wise["percentage"] = (week_wise["wsum"] / week_wise["total_sum"]) * 100
 
+    for i in range(len(week_wise)):
+        cur_month = int(week_wise.loc[i, "week"].split("_")[0])
+        cur_week = int(week_wise.loc[i, "week"].split("_")[1])
+        text.append("""You had total {} percent of weekly transactions in 
+        week number {} of month {} for category {}.""".format(week_wise.loc[i, "percentage"],
+                                                              cur_week,
+                                                              calendar.month_name[cur_month],
+                                                              week_wise.loc[i, "category"]))
+
+        if week_wise.loc[i, "wsum"] > 0.16 * float(week_wise.loc[i, "balance"]):
+            text.append("""I should not have made transaction in category {} in 
+        week number {} of month {} since cost was {} and 
+        available balance was {}.""".format(
+                week_wise.loc[i, "category"],
+                cur_week,
+                calendar.month_name[cur_month],
+                week_wise.loc[i, "wsum"],
+                week_wise.loc[i, "balance"]))
+        else:
+            text.append("""It was an easy option to make transaction in category {} in 
+        week number {} of month {} since cost was {} and 
+        available balance was {}.""".format(
+                week_wise.loc[i, "category"],
+                cur_week,
+                calendar.month_name[cur_month],
+                week_wise.loc[i, "wsum"],
+                week_wise.loc[i, "balance"]))
+
+    text.append("\n")
+    week_wise = week_wise.groupby(["week", "balance", "total_sum"]).agg({"category": "count"})
+    week_wise.reset_index(inplace=True)
+    week_wise["spend_ratio"] = (week_wise["total_sum"] / week_wise["balance"]) * 100
+
+    for i in range(len(week_wise)):
+        cur_month = int(week_wise.loc[i, "week"].split("_")[0])
+        cur_week = int(week_wise.loc[i, "week"].split("_")[1])
+
+        if week_wise.loc[i, "spend_ratio"] >= 20:
+            text.append("""I spent too much amount in 
+        week number {} of month {} across {} categories""".format(
+                cur_week,
+                calendar.month_name[cur_month],
+                week_wise.loc[i, "category"]))
+        else:
+            text.append("""I spent less amount in 
+        week number {} of month {} across {} categories. So I am in good financial health""".format(
+                cur_week,
+                calendar.month_name[cur_month],
+                week_wise.loc[i, "category"]))
+    text.append("\n")
     category_list = df.category.unique().tolist()
     category_wise_spends = df.groupby(by=["month", "category"]).agg({"withdrawal": "sum"})
     category_wise_spends.reset_index(inplace=True)
     category_wise_spends.sort_values(["month", "withdrawal"], inplace=True, ascending=[1, 0])
     category_wise_spends.reset_index(inplace=True, drop=True)
-
     cat_wise_gains = df.groupby(by=["month", "category"]).agg({"deposit": "sum"})
     cat_wise_gains.reset_index(inplace=True)
     cat_wise_gains = cat_wise_gains[cat_wise_gains.deposit > 0]
     cat_wise_gains.reset_index(inplace=True, drop=True)
     cat_wise_gains = cat_wise_gains.groupby(by=["month"]).agg({"deposit": "sum"})
     cat_wise_gains.reset_index(inplace=True)
-
     category_wise_spends = category_wise_spends.merge(cat_wise_gains)
     category_wise_spends["affinity"] = (category_wise_spends["withdrawal"] / category_wise_spends["deposit"]) * 100
+
     overall_spend_trend = []
     for cat in category_list:
         spend_trend = []
@@ -80,9 +134,8 @@ def process_data(df):
         if category in ["SALARY", "INTEREST"]:
             continue
 
-        text.append("I have spent {}% amount of my monthly income on category {}".format(affinity, category))
-        text.append(
-            "I have spent amount {} on category {} in month {}".format(cur, category, calendar.month_name[cur_month]))
+        text.append("You have spent {}% amount of your monthly income on category {}".format(affinity, category))
+        text.append("You have spent amount {} on category {} in month {}".format(cur, category, calendar.month_name[cur_month]))
 
         for i in range(1, len(item)):
             prev = cur
@@ -92,18 +145,18 @@ def process_data(df):
             cur_month = item[i]["month"]
             affinity = item[0]["affinity"]
 
-            text.append("I have spent {}% amount of my monthly income on category {}".format(affinity, category))
+            text.append("You have spent {}% amount of your monthly income on category {}".format(affinity, category))
             if cur == 0:
-                text.append("I have not spent any amount on category {} in month {}".format(category,
+                text.append("You have not spent any amount on category {} in month {}".format(category,
                                                                                             calendar.month_name[
                                                                                                 cur_month]))
             else:
-                text.append("I have spent amount {} on category {} in month {}".format(cur, category,
+                text.append("You have spent amount {} on category {} in month {}".format(cur, category,
                                                                                        calendar.month_name[cur_month]))
 
             if prev == 0:
-                text.append("""This month I have spent {} amount is spent in {} on {} 
-                            where as last month I did not make any transaction in this category {}""".format(cur,
+                text.append("""This month You have spent {} amount is spent in {} on {} 
+                            where as last month You did not make any transaction in this category {}""".format(cur,
                                                                                                              category,
                                                                                                              calendar.month_name[
                                                                                                                                              cur_month],
@@ -113,34 +166,33 @@ def process_data(df):
             ratio = cur / prev
 
             if ratio < 0.25:
-                text.append("There is a significant drop in my expenses for {} from {} to {}.".format(category,
+                text.append("There is a significant drop in your expenses for {} from {} to {}".format(category,
                                                                                                       calendar.month_name[
                                                                                                           prev_month],
                                                                                                       calendar.month_name[
                                                                                                           cur_month]))
-                text.append("Ratio of drop is {}.".format(ratio))
+                text.append("Ratio of drop is {}".format(ratio))
             elif 0.25 <= ratio < 1:
-                text.append("There is a slight drop in my expenses for {} from {} to {}.".format(category,
+                text.append("There is a slight drop in your expenses for {} from {} to {}.".format(category,
                                                                                                  calendar.month_name[
                                                                                                      prev_month],
                                                                                                  calendar.month_name[
                                                                                                      cur_month]))
                 text.append("Ratio of drop is {}.".format(ratio))
             elif 1 <= ratio < 2.5:
-                text.append("There is a tiny increase in my expenses for {} from {} to {}.".format(category,
+                text.append("There is a tiny increase in your expenses for {} from {} to {}.".format(category,
                                                                                                    calendar.month_name[
                                                                                                        prev_month],
                                                                                                    calendar.month_name[
                                                                                                        cur_month]))
                 text.append("Ratio of increase is {}.".format(ratio))
             elif ratio > 2.5:
-                text.append("There is a significant of increase in my expenses for {} from {} to {}.".format(category,
+                text.append("There is a significant of increase in your expenses for {} from {} to {}.".format(category,
                                                                                                              calendar.month_name[
                                                                                                                  prev_month],
                                                                                                              calendar.month_name[
                                                                                                                  cur_month]))
                 text.append("Ratio of increase is {}.".format(ratio))
-
         text.append("\n")
 
     category_affinity = category_wise_spends.groupby(by=["category"]).agg({"affinity": "sum"})
@@ -156,46 +208,73 @@ def process_data(df):
                                                                                    category_affinity.loc[
                                                                                        i, "affinity"]))
         elif i < len(category_affinity) - 1:
-            text.append("My likeliness of expenditure towards category {} is {}%".format(
+            text.append("Your likeliness of expenditure towards category {} is {}% ".format(
                 category_affinity.loc[i, "category"], category_affinity.loc[i, "affinity"]))
         else:
             text.append(
-                "Lowest expenses are done in category {} which is {}".format(category_affinity.loc[i, "category"],
+                "Lowest expenses are done in category {} which is {} ".format(category_affinity.loc[i, "category"],
                                                                              category_affinity.loc[i, "affinity"]))
-
+    text.append("\n")
     per_day_bal = df.groupby(["txdate"]).agg({"balance": "max"})
     per_day_bal.reset_index(inplace=True)
     for i in range(len(per_day_bal)):
-        text.append(
-            "I have balance {} on day {}.\n".format(per_day_bal.loc[i, "txdate"], per_day_bal.loc[i, "balance"]))
+        text.append("You have balance {} on day {}. ".format(per_day_bal.loc[i, "txdate"], per_day_bal.loc[i, "balance"]))
 
     for i in range(len(df)):
         if df.loc[i, "category"] == "SALARY":
-            text.append("I got my salary of amount {} on {} for month {}.".format(df.loc[i, "month"],
+            text.append("You got your salary of amount {} on {} for month {}. ".format(df.loc[i, "month"],
                                                                                   df.loc[i, "txdate"],
                                                                                   calendar.month_name[
                                                                                       df.loc[i, "month"]]))
 
         if df.loc[i, "category"] == "EMI":
-            text.append("I paid EMI {} on for month {}.".format(df.loc[i, "month"],
+            text.append("You paid your EMI {} on for month {}. ".format(df.loc[i, "month"],
                                                                 df.loc[i, "txdate"],
                                                                 calendar.month_name[df.loc[i, "month"]]))
             emi_check = re.findall(r"([0-9]+/[0-9]+)", df.loc[i, "details"])
             if isinstance(emi_check, list) and len(emi_check) > 0:
                 values = re.findall("([0-9]+/[0-9]+)", df.loc[i, "details"])[0].split("/")
                 emis_left = int(values[1]) - int(values[0])
-                text.append("Now {} EMIs are left for transaction {} from month {} onwards.".format(emis_left,
-                                                                                                    df.loc[
-                                                                                                        i, "details"],
-                                                                                                    calendar.month_name[
-                                                                                                        df.loc[
-                                                                                                            i, "month"]]))
+                text.append(
+                    "Now {} EMIs are left to be paid for transaction {} from month {} onwards. ".format(emis_left,
+                                                                                                       df.loc[
+                                                                                                           i, "details"],
+                                                                                                       calendar.month_name[
+                                                                                                           df.loc[
+                                                                                                               i, "month"]]))
+    text.append("\n")
 
+    fixed_income_expense = df.groupby([df['txdate'].dt.month, "category", ]).agg(
+        {"deposit": "sum", "withdrawal": "sum"})
+    fixed_income_expense.reset_index(inplace=True, drop=False)
+
+    for i in range(len(fixed_income_expense)):
+        if fixed_income_expense.loc[i, "category"] == "SALARY":
+            text.append(
+                "You have income of amount {} as salary for month {}.".format(fixed_income_expense.loc[i, "deposit"],
+                                                                            calendar.month_name[
+                                                                                fixed_income_expense.loc[i, "txdate"]]))
+
+    savings = df.groupby(["month"]).agg({"withdrawal": "sum", "deposit": "sum"})
+
+    savings.reset_index(inplace=True)
+
+    savings["saved"] = savings["deposit"] - savings["withdrawal"]
+
+    for i in range(len(savings)):
+        if savings.loc[i, "saved"] > 0:
+            text.append("""You have total savings of  amount of {} in month {}. """.format(savings.loc[i, "saved"],
+                                                                            calendar.month_name[
+                                                                                savings.loc[i, "month"]]))
+        else:
+            text.append("""You were not able to save any money this month, You went into negative finances with your expenses 
+                with negative amount {} in month {}. """.format(savings.loc[i, "saved"],
+                                                               calendar.month_name[savings.loc[i, "month"]]))
+
+    text.append("\n")
     with open("input.txt", "w") as file:
         for line in text:
             file.write(line)
-
-
 
 
 

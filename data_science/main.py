@@ -10,9 +10,17 @@ from langchain.vectorstores import FAISS
 from langchain.document_loaders import TextLoader
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
+from fastapi.middleware.cors import CORSMiddleware
 from utils import process_data
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 con = psycopg2.connect(database="postgres", user="postgres", password = "admin", host="127.0.0.1", port="5432")
 cursor = con.cursor()
 openai.api_key = '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'
@@ -40,8 +48,8 @@ async def get_incident(user_id):
     documents = loader.load()
     text_splitter = CharacterTextSplitter(
         separator="\n",
-        chunk_size=2000,
-        chunk_overlap=0,
+        chunk_size=4000,
+        chunk_overlap=400,
         length_function=len
     )
     app.loaded_text = text_splitter.split_documents(documents)
