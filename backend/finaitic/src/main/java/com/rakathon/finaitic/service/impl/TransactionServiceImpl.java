@@ -6,6 +6,7 @@ import com.rakathon.finaitic.entity.Category;
 import com.rakathon.finaitic.entity.Transaction;
 import com.rakathon.finaitic.repo.CategoryRepository;
 import com.rakathon.finaitic.repo.TransactionRepository;
+import com.rakathon.finaitic.service.CategoryService;
 import com.rakathon.finaitic.service.TransactionService;
 import com.rakathon.finaitic.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
@@ -33,6 +34,8 @@ public class TransactionServiceImpl implements TransactionService {
     CategoryRepository categoryRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    CategoryService categoryService;
     private List<Category> categories;
     Map<String, Integer> keywords;
 
@@ -44,6 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .build()
                     .parse();
             saveTransactionsListWithDetails(list, user);
+            categoryService.generateFile(user);
             return true;
         }
         catch (FileNotFoundException e) {

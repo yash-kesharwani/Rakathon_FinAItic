@@ -7,5 +7,5 @@ import java.util.List;
 
 @Service
 public interface CategoryService {
-    String fetchCategory(String details, List<Category> categories);
+    boolean generateFile(String user);
 }

@@ -3,6 +3,7 @@ package com.rakathon.finaitic.service.impl;
 import com.rakathon.finaitic.dao.RegisteReq;
 import com.rakathon.finaitic.entity.User;
 import com.rakathon.finaitic.repo.UserRepository;
+import com.rakathon.finaitic.service.CategoryService;
 import com.rakathon.finaitic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    CategoryService categoryService;
     @Override
     public boolean register(RegisteReq registeReq) {
         try {
@@ -44,6 +47,7 @@ public class UserServiceImpl implements UserService {
             String pass = new String(Base64.getDecoder().decode(user.getPassword()));
             if(pass.equalsIgnoreCase(password)){
                 user.setPassword(null);
+                categoryService.generateFile(String.valueOf(user.getId()));
                 return user;
             }else return null;
         }else return null;
