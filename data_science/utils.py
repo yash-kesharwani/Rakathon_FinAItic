@@ -244,7 +244,7 @@ def process_data(df):
                                                                                                                i, "month"]]))
     text.append("\n")
 
-    fixed_income_expense = df.groupby([df['txdate'].dt.month, "category", ]).agg(
+    fixed_income_expense = df.groupby(["month", "category", ]).agg(
         {"deposit": "sum", "withdrawal": "sum"})
     fixed_income_expense.reset_index(inplace=True, drop=False)
 
@@ -253,7 +253,7 @@ def process_data(df):
             text.append(
                 "You have income of amount {} as salary for month {}.".format(fixed_income_expense.loc[i, "deposit"],
                                                                             calendar.month_name[
-                                                                                fixed_income_expense.loc[i, "txdate"]]))
+                                                                                fixed_income_expense.loc[i, "month"]]))
 
     savings = df.groupby(["month"]).agg({"withdrawal": "sum", "deposit": "sum"})
 
