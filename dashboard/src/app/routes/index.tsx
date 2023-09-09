@@ -26,7 +26,7 @@ const routes = [
         element: <View />,
       },
       {
-        path: 'conversations',
+        path: 'finnie',
         element: <Conversation />,
       },
     ],

@@ -50,7 +50,7 @@ export function Dashboard() {
               hover:text-primary"
           >
             <NavLink
-              to={'/conversations'}
+              to={'/finnie'}
               className={({ isActive }) =>
                 isActive ? 'flex flex-col items-center text-primary' : 'flex flex-col items-center'
               }
@@ -64,7 +64,7 @@ export function Dashboard() {
                           4V4a2 2 0 012-2h11v2H4v13.17L5.17 16H20v-5h2z"
                 ></path>
               </svg>
-              <span className="mt-2 text-xs">Conversations</span>
+              <span className="mt-2 text-xs">Ask Finnie</span>
             </NavLink>
           </li>
         </ul>

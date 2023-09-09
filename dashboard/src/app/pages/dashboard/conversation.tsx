@@ -67,7 +67,7 @@ export default function Conversation() {
             <div className="chat-area flex flex-1 flex-col">
               <div className="flex-3">
                 <h2 className="mb-8 border-b-2 border-gray-200 py-1 text-xl">
-                  Chatting with <b>FinAItic Assistant</b>
+                  Chatting with <b>Finnie</b>
                 </h2>
               </div>
               <div className="h-[65vh] w-full overflow-y-auto">
