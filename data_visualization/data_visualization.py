@@ -13,7 +13,7 @@ import pandas as pd
 
 app = FastAPI()
 
-con = psycopg2.connect(database="postgres", user="postgres", host="127.0.0.1", port="5431")
+con = psycopg2.connect(database="postgres", user="postgres",password = "admin", host="127.0.0.1", port="5432")
 cursor = con.cursor()
 
 origins = [
