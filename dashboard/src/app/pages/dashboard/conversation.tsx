@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import {
   addAnswer,
@@ -12,7 +12,11 @@ function ChatBubble({ question, answer, time }: any) {
     <div key={answer} className="message mb-4 flex">
       <div className="flex-2">
         <div className="relative h-12 w-12">
-          <img className="mx-auto h-12 w-12 rounded-full" src="ai-image.png" alt="chat-user" />
+          <img
+            className="mx-auto h-12 w-12 rounded-full"
+            src="finance-network.svg"
+            alt="chat-user"
+          />
         </div>
       </div>
       <div className="flex-1 px-2">
@@ -42,14 +46,36 @@ export default function Conversation() {
   const dispatch = useAppDispatch()
   const consultations = useAppSelector(consultationSelector)
   const [query, setQuery] = useState('')
-  const [getAnswer] = useGetAnswersMutation()
+  const [getAnswer, { isLoading }] = useGetAnswersMutation()
+  const chatWindowRef = useRef<any>(null)
+  const typingRef = useRef<any>(null)
+
+  useEffect(() => {
+    chatWindowRef.current &&
+      chatWindowRef.current.scrollIntoView({
+        behavior: 'smooth',
+      })
+  }, [])
+
+  useEffect(() => {
+    typingRef.current &&
+      typingRef.current.scrollIntoView({
+        behavior: 'smooth',
+      })
+  }, [isLoading])
 
   const handleSend = async () => {
     try {
+      chatWindowRef.current.scrollIntoView({
+        behavior: 'smooth',
+      })
       dispatch(addQuestion(query))
       setQuery('')
       const payload = await getAnswer(query).unwrap()
       dispatch(addAnswer(payload.answer))
+      chatWindowRef.current.scrollIntoView({
+        behavior: 'smooth',
+      })
     } catch (e) {
       console.log(e)
     }
@@ -71,7 +97,30 @@ export default function Conversation() {
                 </h2>
               </div>
               <div className="h-[65vh] w-full overflow-y-auto">
-                <div className="messages flex-1">{consultations.map(ChatBubble)}</div>
+                <div className="messages flex-1">
+                  {consultations.map(ChatBubble)}
+
+                  {isLoading && (
+                    <div key={'typing'} className="message mb-4 flex" ref={typingRef}>
+                      <div className="flex-2">
+                        <div className="relative h-12 w-12">
+                          <img
+                            className="mx-auto h-12 w-12 rounded-full"
+                            src="finance-network.svg"
+                            alt="chat-user"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex-1 px-2">
+                        <div className="inline-block max-w-xs animate-typing overflow-hidden whitespace-nowrap rounded-lg bg-gray-300 p-2 px-6 text-gray-700">
+                          <span>. . . . .</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="clear-both h-10 w-5" ref={chatWindowRef}></div>
+                </div>
               </div>
               <div className="flex-2 pb-10 pt-4">
                 <div className="write flex rounded-lg bg-white shadow">
