@@ -2,7 +2,7 @@ import subprocess
 import psutil
 import uvicorn
 from fastapi import FastAPI, Response
-from mapperclasses.input  import DatamodelParams
+from mapperclasses.input import DatamodelParams
 from fastapi.params import Body
 import json
 import psycopg2
@@ -10,10 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
 
-
 app = FastAPI()
 
-con = psycopg2.connect(database="postgres", user="postgres",password = "admin", host="127.0.0.1", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres",
+                       password='admin', host="127.0.0.1", port="5432")
 cursor = con.cursor()
 
 origins = [
@@ -31,77 +31,91 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/test")
 
+@app.get("/test")
 def test():
     return {"test": "Service is up!"}
 
+
 @app.post("/income_category_avg")
-def category_avg(response: Response,request: DatamodelParams = Body(...)):
+def category_avg(response: Response, request: DatamodelParams = Body(...)):
     user_id = request.user_id
-    postgreSQL_select_Query = "select name,avg(value) as value from ( select DATE_TRUNC('month', txdate) as month,category as name, cast(avg(deposit) as int) as value  from transactions where user_id = '"+user_id+"' group by DATE_TRUNC ('month', txdate) ,user_id,category having avg(deposit) > 0)as temp group by name;"
+    postgreSQL_select_Query = "select name,avg(value) as value from ( select DATE_TRUNC('month', txdate) as month,category as name, cast(avg(deposit) as int) as value  from transactions where user_id = '" + \
+        user_id + \
+        "' group by DATE_TRUNC ('month', txdate) ,user_id,category having avg(deposit) > 0)as temp group by name;"
     cursor.execute(postgreSQL_select_Query)
-    categories =  cursor.fetchall()
-    categories_df = pd.DataFrame.from_records(categories, columns=[x[0] for x in cursor.description])
+    categories = cursor.fetchall()
+    categories_df = pd.DataFrame.from_records(
+        categories, columns=[x[0] for x in cursor.description])
     data = categories_df.to_dict(orient="records")
     return_json = {
-  "series": [
-    {
-      "type": 'pie',
-      "data": data,
-        }
-    ]
+        "series": [
+            {
+                "type": 'pie',
+                "data": data,
+            }
+        ]
     }
     json_str = json.dumps(return_json, indent=4, default=str)
     return Response(content=json_str, media_type='application/json')
+
 
 @app.post("/expense_category_avg")
-def category_avg(response: Response,request: DatamodelParams = Body(...)):
+def category_avg(response: Response, request: DatamodelParams = Body(...)):
     user_id = request.user_id
-    postgreSQL_select_Query = "select name,avg(value) as value from ( select DATE_TRUNC ('month', txdate) as month,category as name, cast(sum(withdrawal) as int) as value  from transactions where user_id = '"+user_id+"' group by DATE_TRUNC('month', txdate) ,category having avg(withdrawal) > 0) as temp group by name;"
+    postgreSQL_select_Query = "select name,avg(value) as value from ( select DATE_TRUNC ('month', txdate) as month,category as name, cast(sum(withdrawal) as int) as value  from transactions where user_id = '" + \
+        user_id + \
+        "' group by DATE_TRUNC('month', txdate) ,category having avg(withdrawal) > 0) as temp group by name;"
     cursor.execute(postgreSQL_select_Query)
-    categories =  cursor.fetchall()
-    categories_df = pd.DataFrame.from_records(categories, columns=[x[0] for x in cursor.description])
+    categories = cursor.fetchall()
+    categories_df = pd.DataFrame.from_records(
+        categories, columns=[x[0] for x in cursor.description])
     data = categories_df.to_dict(orient="records")
     return_json = {
-  "series": [
-    {
-      "type": 'pie',
-      "data": data,
-      "roseType": 'area'
-        }
-    ]
+        "series": [
+            {
+                "type": 'pie',
+                "data": data,
+                "roseType": 'area'
+            }
+        ]
     }
     json_str = json.dumps(return_json, indent=4, default=str)
     return Response(content=json_str, media_type='application/json')
 
+
 @app.post("/summary")
-def category_avg(response: Response,request: DatamodelParams = Body(...)):
+def category_avg(response: Response, request: DatamodelParams = Body(...)):
     user_id = request.user_id
     postgreSQL_select_Query = "select sum(deposit) as deposit,sum(withdrawal) as withdrawal from transactions where user_id = '"+user_id+"';"
     cursor.execute(postgreSQL_select_Query)
-    categories =  cursor.fetchall()
-    categories_df = pd.DataFrame.from_records(categories, columns=[x[0] for x in cursor.description])
+    categories = cursor.fetchall()
+    categories_df = pd.DataFrame.from_records(
+        categories, columns=[x[0] for x in cursor.description])
     data = categories_df.to_dict(orient='records')
     return_json = {
-  "series": [
-    {
-      "type": 'pie',
-      "data": data,
-      "roseType": 'area'
-        }
-    ]
+        "series": [
+            {
+                "type": 'pie',
+                "data": data,
+                "roseType": 'area'
+            }
+        ]
     }
     json_str = json.dumps(return_json, indent=4, default=str)
     return Response(content=json_str, media_type='application/json')
 
+
 @app.post("/monthwise_summary")
-def category_avg(response: Response,request: DatamodelParams = Body(...)):
+def category_avg(response: Response, request: DatamodelParams = Body(...)):
     user_id = request.user_id
-    postgreSQL_select_Query = "select TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm') as month,sum(deposit) as deposit,sum(withdrawal) as withdrawal from transactions where user_id = '"+user_id+"' group by TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm') order by TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm');"
+    postgreSQL_select_Query = "select TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm') as month,sum(deposit) as deposit,sum(withdrawal) as withdrawal from transactions where user_id = '" + \
+        user_id + \
+        "' group by TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm') order by TO_CHAR(DATE_TRUNC ('month', txdate),'YYYY-mm');"
     cursor.execute(postgreSQL_select_Query)
-    categories =  cursor.fetchall()
-    categories_df = pd.DataFrame.from_records(categories, columns=[x[0] for x in cursor.description])
+    categories = cursor.fetchall()
+    categories_df = pd.DataFrame.from_records(
+        categories, columns=[x[0] for x in cursor.description])
     col_month_list = categories_df['month'].tolist()
     col_deposit_list = categories_df['deposit'].tolist()
     col_withdrawal_list = categories_df['withdrawal'].tolist()
@@ -109,24 +123,28 @@ def category_avg(response: Response,request: DatamodelParams = Body(...)):
     for i in range(len(col_deposit_list)):
         col_savings_list.append(col_deposit_list[i]-col_withdrawal_list[i])
     return_json = {
-  "xAxis": {
-    "data": col_month_list
-  },
-  "yAxis": {},
-  "series": [
-    {
-      "Withdrawals": col_withdrawal_list,
-      "type": 'bar',
-      "stack": 'x'
-    },
-    {
-      "Savings": col_savings_list,
-      "type": 'bar',
-      "stack": 'x'
-    }
-  ]
+        "xAxis": {
+            "data": col_month_list
+        },
+        "yAxis": {},
+        "series": [
+            {
+                "data": col_withdrawal_list,
+                "type": 'bar',
+                "stack": 'x',
+                "name": 'Expenses'
+            },
+            {
+                "data": col_savings_list,
+                "type": 'bar',
+                "stack": 'x',
+                "name": 'Savings'
+
+            }
+        ]
     }
     json_str = json.dumps(return_json, indent=4, default=str)
     return Response(content=json_str, media_type='application/json')
 
-uvicorn.run(app, host="0.0.0.0", port=8083, log_level="debug")
+
+# uvicorn.run(app, host="0.0.0.0", port=8083, log_level="debug", reload=True)
