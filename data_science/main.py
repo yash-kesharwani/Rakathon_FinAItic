@@ -48,8 +48,8 @@ async def get_incident(user_id):
     documents = loader.load()
     text_splitter = CharacterTextSplitter(
         separator="\n",
-        chunk_size=4000,
-        chunk_overlap=400,
+        chunk_size=1000,
+        chunk_overlap=200,
         length_function=len
     )
     app.loaded_text = text_splitter.split_documents(documents)
@@ -58,7 +58,7 @@ async def get_incident(user_id):
 
 @app.post("/get_response/")
 async def get_incident(input_val: dict = Body(Ellipsis)):
-    chain = load_qa_chain(OpenAI(), chain_type="stuff")
+    chain = load_qa_chain(OpenAI(max_tokens=1500, model="text-davinci-003" ), chain_type="stuff")
     document_search = FAISS.from_documents(app.loaded_text, app.embeddings)
     docs = document_search.similarity_search(input_val["question"])
     result = chain.run(input_documents=docs, question=input_val["question"])
